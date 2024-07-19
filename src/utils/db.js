@@ -2,12 +2,11 @@ const { Sequelize } = require("sequelize");
 require("dotenv").config();
 
 const sequelize = new Sequelize(
-  'ruminar-app',  
-  'postgres', 
-  '123mudar', 
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASS,
   {
-    host: 'localhost', 
-    dialect: 'postgres', 
+    host: process.env.DB_HOST,
     port: 5432, 
     dialect: "postgres",
     ssl: {
