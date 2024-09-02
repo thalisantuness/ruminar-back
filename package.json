@@ -7,16 +7,8 @@
     "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/iagobecker/Ruminar.git"
-  },
-  "author": "",
+  "author": "cardialit",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/iagobecker/Ruminar/issues"
-  },
-  "homepage": "https://github.com/iagobecker/Ruminar#readme",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",

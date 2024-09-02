@@ -8,6 +8,10 @@ const ResumoController = require("../controllers/resumoController");
 const resumoController = ResumoController();
 const UsuarioController = require("../controllers/usuariosController");
 const usuariosController = UsuarioController();
+const FinancaController = require("../controllers/financaController");
+const financasController = FinancaController();
+const CalculoAguaController = require("../controllers/calculoAguaController");
+const calculoAguaController = CalculoAguaController();
 const authMiddleware = require("../middleware/auth")
 
 
@@ -38,5 +42,19 @@ router.get("/resumo/:id", resumoController.findItemById);
 router.put("/resumo/:id", resumoController.updateItem);
 router.delete("/resumo/:id", resumoController.deleteItem);
 router.get("/resumo/user/:usuario_id", resumoController.findItemsByUserId)
+
+router.post("/financa", financasController.createItem);
+router.get("/financas", financasController.findAllItem);
+router.get("/financa/:id", financasController.findItemById);
+router.put("/financa/:id", financasController.updateItem);
+router.delete("/financa/:id", financasController.deleteItem);
+router.get("/financa/user/:usuario_id", financasController.findItemsByUserId)
+
+router.post("/calculoagua", calculoAguaController.createItem);
+router.get("/calculoaguas", calculoAguaController.findAllItem);
+router.get("/calculoagua/user/:usuario_id", calculoAguaController.findItemsByUserId);
+router.get("/calculoagua/:id", calculoAguaController.findItemById);
+router.put("/calculoagua/:id", calculoAguaController.updateItem);
+router.delete("/calculoagua/:id", calculoAguaController.deleteItem);
 
 module.exports = router;
