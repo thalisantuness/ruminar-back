@@ -3,7 +3,7 @@ const repoUsuarios = require('../repositories/repoUsuarios');
 const bcrypt = require('bcrypt'); 
 const jwt = require('jsonwebtoken'); 
 const authConfig = require('../config/auth.json');
-const { enviarEmailBoasVindas } = require('../config/email');
+const { enviarEmailBoasVindas } = require('../config/emailSendGrid');
 
 function UsuarioController() {
     
