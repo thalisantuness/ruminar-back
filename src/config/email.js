@@ -1,21 +1,28 @@
 const nodemailer = require('nodemailer');
 
-// Configuração do transportador de e-mail
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.EMAIL_PORT) || 587,
-  secure: parseInt(process.env.EMAIL_PORT) === 465, 
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  tls: {
-    rejectUnauthorized: true
-  }
-});
+// Só cria o transporter se as variáveis existirem
+let transporter = null;
+
+if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+  transporter = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+    port: parseInt(process.env.EMAIL_PORT) || 587,
+    secure: parseInt(process.env.EMAIL_PORT) === 465,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+}
 
 // Função para enviar e-mail de boas-vindas
 async function enviarEmailBoasVindas(destinatario, nomeUsuario) {
+  // Se não tem transporter configurado, apenas loga e retorna
+  if (!transporter) {
+    console.log('⚠️ E-mail não configurado. Cadastro continua normalmente.');
+    return { success: false, error: 'Email não configurado' };
+  }
+
   try {
     const mailOptions = {
       from: {
@@ -177,28 +184,27 @@ async function enviarEmailBoasVindas(destinatario, nomeUsuario) {
     };
 
     const info = await transporter.sendMail(mailOptions);
-    console.log('E-mail de boas-vindas enviado com sucesso:', info.messageId);
+    console.log('E-mail enviado:', info.messageId);
     return { success: true, messageId: info.messageId };
   } catch (error) {
-    console.error('Erro ao enviar e-mail de boas-vindas:', error);
+    console.error('Erro ao enviar e-mail:', error.message);
     return { success: false, error: error.message };
   }
 }
 
 // Verificar se a configuração de e-mail está correta
 async function verificarConfiguracaoEmail() {
-  // Não verifica em produção para não travar o servidor
-  if (process.env.NODE_ENV === 'production') {
-    console.log('⚠️ Modo produção: verificação de e-mail desativada');
-    return true;
+  if (!transporter) {
+    console.log('⚠️ E-mail não configurado');
+    return false;
   }
   
   try {
     await transporter.verify();
-    console.log('✅ Servidor de e-mail está pronto para enviar mensagens');
+    console.log('✅ E-mail configurado');
     return true;
   } catch (error) {
-    console.error('⚠️ E-mail pode ter problema:', error.message);
+    console.error('❌ Erro no e-mail:', error.message);
     return false;
   }
 }
