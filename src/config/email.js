@@ -23,12 +23,9 @@ async function enviarEmailBoasVindas(destinatario, nomeUsuario) {
 
   try {
     const mailOptions = {
-      from: {
-        name: 'Ruminar Leite',
-        address: process.env.EMAIL_USER === 'apikey' ? 'ruminarleite@gmail.com' : process.env.EMAIL_USER
-      },
-      to: destinatario,
-      subject: 'Bem-vindo ao Ruminar Leite! 🐄',
+  from: 'ruminarleite@gmail.com', // Deve ser exatamente esse email verificado
+  to: destinatario,
+  subject: 'Bem-vindo ao Ruminar Leite! 🐄',
       html: `
         <!DOCTYPE html>
         <html lang="pt-BR">
