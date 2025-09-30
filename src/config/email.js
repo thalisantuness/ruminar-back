@@ -1,6 +1,5 @@
 const nodemailer = require('nodemailer');
 
-// Só cria o transporter se as variáveis existirem
 let transporter = null;
 
 if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
@@ -17,9 +16,8 @@ if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
 
 // Função para enviar e-mail de boas-vindas
 async function enviarEmailBoasVindas(destinatario, nomeUsuario) {
-  // Se não tem transporter configurado, apenas loga e retorna
   if (!transporter) {
-    console.log('⚠️ E-mail não configurado. Cadastro continua normalmente.');
+    console.log('⚠️ E-mail não configurado');
     return { success: false, error: 'Email não configurado' };
   }
 
@@ -27,7 +25,7 @@ async function enviarEmailBoasVindas(destinatario, nomeUsuario) {
     const mailOptions = {
       from: {
         name: 'Ruminar Leite',
-        address: process.env.EMAIL_USER
+        address: process.env.EMAIL_USER === 'apikey' ? 'ruminarleite@gmail.com' : process.env.EMAIL_USER
       },
       to: destinatario,
       subject: 'Bem-vindo ao Ruminar Leite! 🐄',
@@ -183,28 +181,25 @@ async function enviarEmailBoasVindas(destinatario, nomeUsuario) {
       `,
     };
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log('E-mail enviado:', info.messageId);
+   const info = await transporter.sendMail(mailOptions);
+    console.log('Email enviado:', info.messageId);
     return { success: true, messageId: info.messageId };
   } catch (error) {
-    console.error('Erro ao enviar e-mail:', error.message);
+    console.error('Erro ao enviar email:', error.message);
     return { success: false, error: error.message };
   }
 }
 
 // Verificar se a configuração de e-mail está correta
 async function verificarConfiguracaoEmail() {
-  if (!transporter) {
-    console.log('⚠️ E-mail não configurado');
-    return false;
-  }
+  if (!transporter) return false;
   
   try {
     await transporter.verify();
-    console.log('✅ E-mail configurado');
+    console.log('✅ Email configurado');
     return true;
   } catch (error) {
-    console.error('❌ Erro no e-mail:', error.message);
+    console.error('❌ Erro no email:', error.message);
     return false;
   }
 }
