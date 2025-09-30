@@ -187,12 +187,18 @@ async function enviarEmailBoasVindas(destinatario, nomeUsuario) {
 
 // Verificar se a configuração de e-mail está correta
 async function verificarConfiguracaoEmail() {
+  // Não verifica em produção para não travar o servidor
+  if (process.env.NODE_ENV === 'production') {
+    console.log('⚠️ Modo produção: verificação de e-mail desativada');
+    return true;
+  }
+  
   try {
     await transporter.verify();
     console.log('✅ Servidor de e-mail está pronto para enviar mensagens');
     return true;
   } catch (error) {
-    console.error('❌ Erro na configuração do servidor de e-mail:', error);
+    console.error('⚠️ E-mail pode ter problema:', error.message);
     return false;
   }
 }
